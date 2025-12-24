@@ -3,9 +3,12 @@ import { CanvasCapture } from "@packages/r3f-gist/components/utility";
 import BasicMesh from '../components/BasicMesh'
 import { LevaWrapper } from "@packages/r3f-gist/components";
 import { Canvas } from "@react-three/fiber";
-import { AdaptiveDPRMonitor } from "@packages/r3f-gist/components/webgl";
+import { WebGPURenderer } from "three/webgpu";
+import { useState } from "react";
 
 export default function App() {
+    const [frameloop, setFrameloop] = useState("never");
+    
     return <>
         <LevaWrapper />
 
@@ -17,12 +20,21 @@ export default function App() {
                 far: 200,
                 position: [0, 0, 5]
             }}
-            gl={{ preserveDrawingBuffer: true }}
+            gl={(canvas) => {
+                const renderer = new WebGPURenderer({
+                  ...canvas,
+                  powerPreference: "high-performance",
+                  antialias: true,
+                  alpha: false,
+                  stencil: false,
+                  shadowMap: true,
+                });
+                return renderer.init().then(() => renderer);
+              }}
             dpr={[1, 2]}
             performance={{ min: 0.5, max: 1 }}
         >
             <AdaptiveDpr pixelated />
-
             <CameraControls makeDefault />
             <BasicMesh />
             <CanvasCapture />
