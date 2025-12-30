@@ -2,10 +2,10 @@ import { useMemo, useRef, useLayoutEffect } from "react";
 import { useControls } from "leva";
 import * as THREE from "three";
 import { uv, vec4, uniform } from "three/tsl";
-import { MeshBasicNodeMaterial } from "three/webgpu";
+import { NodeMaterial } from "three/webgpu";
 import { extend } from "@react-three/fiber";
 
-extend({ MeshBasicNodeMaterial });
+extend({ NodeMaterial });
 
 export default function BasicMesh() {
   const materialRef = useRef(null);
@@ -31,7 +31,7 @@ export default function BasicMesh() {
   return (
     <mesh>
       <planeGeometry args={[2, 2]} />
-      <meshBasicNodeMaterial ref={materialRef} {...materialProps} />
+      <nodeMaterial ref={materialRef} {...materialProps} />
     </mesh>
   );
 }
